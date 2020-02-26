@@ -1,0 +1,3 @@
+scapy
+nmap_vscan
+platform
