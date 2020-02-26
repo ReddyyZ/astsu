@@ -6,5 +6,7 @@ Then, install the astsu ``` python install.py ```. If you are in linux type ```c
 To use type ``` astsu ``` or ``` python astsu.py ```
 
 ## How it works
-- ### Common Scan
+- ### Scan common ports
 Send a TCP Syn packet to the destination on the defined port, if the port is open, use an nmap scan to check the service running on the port and prints all the ports found.
+
+- ### Discover hosts in network
