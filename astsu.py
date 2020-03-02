@@ -64,9 +64,50 @@ def os_scan():
     target = raw_input('root@kali~# ')
     target_os = os_detection.scan(target)
     if target_os:
-        print('[+] Target os: {}'.format(target_os))
+        print('[+] Target OS: {}'.format(target_os))
     else:
-        print('[-] Error when scanning os')
+        print('[-] Error when scanning OS')
+    raw_input('\nPress enter...')
+
+def scan_this_port():
+    print_figlet()
+    print('[+] Target:')
+    target = raw_input('root@kali~# ')
+
+    print('[+] Port:')
+    port = raw_input('root@kali~# ')
+
+    sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    if sock.connect_ex((target,port)) == 0:
+        service = service_detection.scan_service(target,port)
+        print('[+] Port: {} is open - Service Running: {}'.format(port,service))
+    else:
+        print('[-] Port is closed')
+
+    raw_input('\nPress enter...')
+
+def scan_all():
+    print_figlet()
+
+    print('[+] Target:')
+    target = raw_input('root@kali~# ')
+    
+    ports = []
+    for i in range(0,65535):
+        ports.append(i)
+    open_ports = {}
+    print('[+] Starting..')
+    for port in ports:
+        sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+        if sock.connect_ex((target,port)) == 0:
+            open_ports['{}'.format(port)] = '{}'.format(service_detection.scan_service(target,port))
+
+    if open_ports:
+        print('[+] {} ports founded'.format(len(open_ports)))
+    else:
+        print('[-] Not found any open ports.')
+    for port in open_ports:
+        print('[+] Port {} is open - Service Running: {}'.format(port,open_ports[port]))
     raw_input('\nPress enter...')
 
 def print_figlet():
@@ -88,8 +129,10 @@ def main():
 
         print(
             '[1] Scan common ports\n'
-            '[2] Discover hosts in network\n'
-            '[3] Scan OS\n'
+            '[2] Scan specified port'
+            '[3] Scan all ports'
+            '[4] Discover hosts in network\n'
+            '[5] Scan OS\n'
             '[4] Exit\n'
         )
 
@@ -103,8 +146,12 @@ def main():
         if option == 1:
             common_scan()
         elif option == 2:
-            discover_net()
+            scan_this_port()
         elif option == 3:
+            scan_all()
+        elif option == 4:
+            discover_net()
+        elif option == 5:
             os_scan()
         elif option == 4:
             sys.exit(0)
