@@ -1,3 +1,2 @@
-scapy
-nmap_vscan
-platform
+scapy>=2.4.3
+nmap_vscan>=1.1.0
