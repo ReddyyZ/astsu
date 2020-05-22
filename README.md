@@ -9,3 +9,12 @@ Uses as a base the router's ip to map all possible ips. It then sends an ICMP pa
 
 - ### OS Scan
 Sends an ICMP packet to the destination and waits for a response. Then, extracts the TTL from the destination response and checks the possible OS in a list, if have founded, prints it.
+
+## How to install
+Clone this repository
+``` git clone https://github.com/ReddyyZ/astsu.git ```                                                                                    
+- Install python 3.
+  - Linux
+    - ``` apt-get install python3 ```
+  - Windows
+    - [Python 3](https://www.python.org/downloads/)
