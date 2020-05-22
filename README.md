@@ -18,7 +18,7 @@ Clone this repository
     - ``` apt-get install python3 ```
     - ``` python3 -m pip install -r requirements.txt ```
     - ``` python3 install.py ```
-    Done!
+    - Done!
   - Windows
     - [Python 3, download and install](https://www.python.org/downloads/)
     - ``` python3 -m pip install -r requirements.txt ```
