@@ -23,4 +23,4 @@ Clone this repository
     - [Python 3, download and install](https://www.python.org/downloads/)
     - ``` python3 -m pip install -r requirements.txt ```
     - ``` python3 install.py ```
-    Done!
+    - Done!
