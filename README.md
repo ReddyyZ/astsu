@@ -17,4 +17,4 @@ Clone this repository
   - Linux
     - ``` apt-get install python3 ```
   - Windows
-    - [Python 3](https://www.python.org/downloads/)
+    - [Python 3, download and install](https://www.python.org/downloads/)
