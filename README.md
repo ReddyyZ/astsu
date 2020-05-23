@@ -26,6 +26,7 @@ Clone this repository
 - Install python 3.
   - Linux
     - ``` apt-get install python3 ```
+    - ``` chmod +x * ```
     - ``` python3 -m pip install -r requirements.txt ```
     - ``` python3 install.py ```
     - Done!
