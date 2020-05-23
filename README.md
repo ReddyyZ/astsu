@@ -44,4 +44,4 @@ Clone this repository
   - -i | Interface to use in the scan
 
 ## License
-This project is under the [MIT License](LICENSE)
+This project is under the [MIT License](LICENSE).
