@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-# -*- coding:utf-8 -*-a
+
+# -*- coding:utf-8 -*-
 import os,sys,socket,ipaddress,argparse
 from scapy.all import *  
 from ctypes import *
