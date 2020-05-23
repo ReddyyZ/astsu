@@ -34,8 +34,8 @@ Clone this repository
     - Done!
 
 ## Arguments
--sC | Scan common ports                                                                                                                 
--sA | Scan all ports
+- -sC | Scan common ports
+- -sA | Scan all ports
 - -sO | Scan OS
   - -i | Interface to use in the scan
 -sP | Scan defined port
