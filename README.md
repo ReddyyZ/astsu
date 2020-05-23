@@ -42,3 +42,6 @@ Clone this repository
 - -d | Discover hosts in the network
   - -p | Protocol to use in the scan
   - -i | Interface to use in the scan
+
+## License
+This project is under the [MIT License](LICENSE)
