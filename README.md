@@ -1,4 +1,8 @@
 <h1 align="center"> astsu </h1>
+<p align="center">
+  <a href="https://www.python.org/downloads/release/python-373/"><img src="https://img.shields.io/badge/python-3.7-blue"></a>
+  <a href="https://youtube.com/c/fantasmanosistema"><img src="https://img.shields.io/badge/made%20by-ReddyyZ-red"></a>
+</p>
 
 ## How it works
 - ### Scan common ports
