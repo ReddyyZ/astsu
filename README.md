@@ -8,6 +8,8 @@
   <img src="https://img.shields.io/github/repo-size/ReddyyZ/astsu">
 </p>
 
+<img src=".thumb/astsu.png">
+
 ## How it works
 - ### Scan common ports
 Send a TCP Syn packet to the destination on the defined port, if the port is open, use an nmap scan to check the service running on the port and prints all the ports found.
