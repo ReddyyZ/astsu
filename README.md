@@ -46,5 +46,10 @@ Clone this repository
   - -p | Protocol to use in the scan
   - -i | Interface to use in the scan
 
+## OS Support
+**Windows** :heavy_check_mark:                                                                                                           
+**Linux** :heavy_check_mark:                                                                                                             
+**Mac** :question:
+
 ## License
 This project is under the [MIT License](LICENSE).
