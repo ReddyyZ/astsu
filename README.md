@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/github/repo-size/ReddyyZ/astsu">
 </p>
 
-<img src=".thumb/astsu.png">
+<a href="https://youtu.be/u7JHF9pprro"><img src=".thumb/astsu.png"></a>
 
 ## How it works
 - ### Scan common ports
