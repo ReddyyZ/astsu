@@ -2,6 +2,10 @@
 <p align="center">
   <a href="https://www.python.org/downloads/release/python-373/"><img src="https://img.shields.io/badge/python-3.7-blue"></a>
   <a href="https://youtube.com/c/fantasmanosistema"><img src="https://img.shields.io/badge/made%20by-ReddyyZ-red"></a>
+  <a href="https://github.com/ReddyyZ/astsu/issues"><img src="https://img.shields.io/github/issues/ReddyyZ/astsu"></a>
+  <a href="https://github.com/ReddyyZ/astsu/releases"><img src="https://img.shields.io/github/release-date/ReddyyZ/astsu"></a>
+  <a href="https://discord.gg/v5d3PZ9"><img src="https://img.shields.io/discord/704882848364101763"></a>
+  <img src="https://img.shields.io/github/repo-size/ReddyyZ/astsu">
 </p>
 
 ## How it works
