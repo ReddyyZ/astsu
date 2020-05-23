@@ -38,7 +38,7 @@ Clone this repository
 - -sA | Scan all ports
 - -sO | Scan OS
   - -i | Interface to use in the scan
--sP | Scan defined port
+- -sP | Scan defined port
 - -d | Discover hosts in the network
   - -p | Protocol to use in the scan
   - -i | Interface to use in the scan
