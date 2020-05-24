@@ -38,17 +38,28 @@ Clone this repository
 
 ## Arguments
 - -sC | Scan common ports
+  - -p | Protocol to use in the scan
+  - -i | Interface to use
+  - -t | Timeout to each request
+  - -st | Use stealth scan method (TCP)
 - -sA | Scan all ports
-- -sO | Scan OS
-  - -i | Interface to use in the scan
-- -sP | Scan defined port
+  - -p  | Protocol to use in the scan
+  - -i  | Interface to use
+  - -t  | Timeout to each request
+  - -st | Use stealth scan method (TCP)
+- -sP | Scan a range ports
+  - -p | Protocol to use in the scan
+  - -i | Interface to use
+  - -t | Timeout to each request
+  - -st | Use stealth scan method (TCP)
+- -sO | Scan OS of a target
 - -d | Discover hosts in the network
   - -p | Protocol to use in the scan
-  - -i | Interface to use in the scan
+  - -i | Interface to use
 
 ## OS Support
-- **Windows** :heavy_check_mark:                                                                                                        
-- **Linux** :heavy_check_mark:                                                                                                          
+- **Windows** :heavy_check_mark:              
+- **Linux** :heavy_check_mark:             
 - **Mac** :question:
 
 ## License
