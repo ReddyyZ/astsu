@@ -7,10 +7,7 @@ from ctypes import *
 from time import sleep
 from modules import service_detection,os_detection
 
-if os.name == 'nt':
-    clear = lambda:os.system('cls')
-else:
-    clear = lambda:os.system('clear')
+clear = lambda:os.system('cls' if os.name == 'nt' else 'clear')
     
 
 def print_figlet():
