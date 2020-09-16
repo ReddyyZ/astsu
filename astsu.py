@@ -35,10 +35,7 @@ class Scanner:
         self.interface = interface
 
     def port_scan(self,stealth=None,port=80):
-        if not self.protocol:
-            protocol = "TCP"
-        else:
-            protocol = self.protocol
+        protocol = self.protocol if self.protocol else "TCP"
 
         if stealth:
             pkt = IP(dst=self.target)/TCP(dport=port,flags="S")
@@ -60,11 +57,11 @@ class Scanner:
                     return {port: 'Filtered'}
 
         else:
-            if protocol is "TCP":
+            if protocol == "TCP":
                 pkt = IP(dst=self.target)/TCP(dport=port,flags="S")
                 scan = sr1(pkt,timeout=self.timeout,verbose=0)
 
-                if scan is None:
+                if scan == None:
                     return {port: 'Filtered'}
 
                 elif scan.haslayer(TCP):
@@ -76,11 +73,11 @@ class Scanner:
                     elif scan.getlayer(TCP).flags == 0x14:
                         return {port: 'Closed'}
 
-            elif protocol is "UDP":
+            elif protocol == "UDP":
                 pkt = IP(dst=self.target)/UDP(dport=port)
                 scan = sr1(pkt, timeout=self.timeout,verbose=0)
 
-                if scan is None:
+                if scan == None:
                     return {port: 'Open/Filtered'}
                 elif scan.haslayer(UDP):
                     return {port: 'Closed'}
@@ -141,9 +138,9 @@ class Scanner:
         if stealth:
             print("[+]Starting - Stealth TCP Port Scan\n")
         else:
-            if protocol is "TCP":
+            if protocol == "TCP":
                 print("[+]Starting - TCP Connect Port Scan\n")
-            elif protocol is "UDP":
+            elif protocol == "UDP":
                 print("[+]Starting - UDP Port Scan\n")
             else:
                 pass
@@ -184,11 +181,11 @@ class Scanner:
             protocol = "TCP"
 
         print_figlet()
-        if protocol is "TCP" and stealth:
+        if protocol == "TCP" and stealth:
             print("[+]Starting - TCP Stealth Port Scan\n")
-        elif protocol is "TCP" and not stealth:
+        elif protocol == "TCP" and not stealth:
             print("[+]Starting - TCP Connect Port Scan\n")
-        elif protocol is "UDP":
+        elif protocol == "UDP":
             print("[+]Starting - UDP Port Scan\n")
         else:
             pass
