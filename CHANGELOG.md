@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0] - 2020-05-22
+## [v1.0] - 2020-05-22
 ### Added
 ### Arguments
 -sC | Scan common ports
@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - -p | Protocol to use in the scan
   - -i | Interface to use in the scan
 
-## [1.1] - 2020-05-24
+## [v1.1] - 2020-05-24
 ### Added
 Improved port scans, now using scapy, and having 3 scan methods, TCP Connect, TCP Stealth, and UDP.
 ### Modified
@@ -43,3 +43,7 @@ I modified the entire script, leaving the functions in a class, better structuri
 - -d | Discover hosts in the network
   - -p | Protocol to use in the scan
   - -i | Interface to use
+
+## [v1.1.1]
+### Added
+- Bug fixes on "Discover Hosts" scan.

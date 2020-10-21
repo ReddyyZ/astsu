@@ -1,27 +1,40 @@
 #!/usr/bin/env python3
 
 # -*- coding:utf-8 -*-
-import os,sys,socket,ipaddress,argparse
+import os,sys,socket,ipaddress,argparse,textwrap
 from scapy.all import *
 from ctypes import *
 from time import sleep
+from threading import Thread
 from modules import service_detection,os_detection
 
 clear = lambda:os.system('cls' if os.name == 'nt' else 'clear')
-    
+
+__version__ = "v1.1.1"
 
 def print_figlet():
     clear()
-    print(
-    '''
+    print(textwrap.dedent(
+    f'''
     .d8b.  .d8888. d888888b .d8888. db    db 
     d8' `8b 88'  YP `~~88~~' 88'  YP 88    88 
     88ooo88 `8bo.      88    `8bo.   88    88 
     88~~~88   `Y8b.    88      `Y8b. 88    88 
     88   88 db   8D    88    db   8D 88b  d88 
-    YP   YP `8888Y'    YP    `8888Y' ~Y8888P' 
+    YP   YP `8888Y'    YP    `8888Y' ~Y8888P'
+
+    Github: https://github.com/ReddyyZ/astsu
+    By: ReddyyZ
+    Version: {__version__}
+
+    [*]Starting...
     '''
-    )
+    ))
+
+    try:
+        time.sleep(4.5)
+    except KeyboardInterrupt:
+        pass
 
 class Scanner:
     def __init__(self,target=None,my_ip=None,protocol=None,timeout=5,interface=None):
@@ -38,7 +51,7 @@ class Scanner:
             pkt = IP(dst=self.target)/TCP(dport=port,flags="S")
             scan = sr1(pkt,timeout=self.timeout,verbose=0)
 
-            if scan is None:
+            if scan == None:
                 return {port: 'Filtered'}
 
             elif scan.haslayer(TCP):
@@ -247,6 +260,16 @@ class Scanner:
         else:
             print("[-]Error when scanning OS")
 
+    def send_icmp(self,target, result, index):
+        print(f"[+]Sending ICMP request to {target}")
+        target = str(target)
+        host_found = []
+        pkg = IP(dst=target)/ICMP()
+        answers, unanswered = sr(pkg,timeout=1,verbose=0,iface=self.interface if self.interface else None)
+        answers.summary(lambda r : host_found.append(target))
+
+        if host_found: result[index] = host_found[0]
+
     def discover_net(self,ip_range=24):
         protocol = self.protocol
         base_ip = self.my_ip
@@ -263,27 +286,21 @@ class Scanner:
             print("[+]Starting - Discover Hosts Scan")
 
             base_ip = base_ip.split('.')
-            base_ip = f"{str(base_ip[0])}.{str(base_ip[1])}.0.0/{str(ip_range)}"
-            hosts_found = []
+            base_ip = f"{str(base_ip[0])}.{str(base_ip[1])}.{str(base_ip[2])}.0/{str(ip_range)}"
 
             hosts = list(ipaddress.ip_network(base_ip))
+            threads = [None] * len(hosts)
+            results = [None] * len(hosts)
 
-            for i in hosts:
-                try:
-                    target = str(i)
+            for i in range(len(threads)):
+                threads[i] = Thread(target=self.send_icmp,args=(hosts[i], results, i))
+                threads[i].start()
 
-                    pkg = IP(dst=target)/ICMP()
+            for i in range(len(threads)):
+                threads[i].join()
 
-                    if interface:
-                        answers, unanswered = sr(pkg,timeout=1,verbose=0,iface=interface)
-                    else:
-                        answers, unanswered = sr(pkg,timeout=1,verbose=0)
-                    
-                    print(f"[+]Sending ICMP request to {target}")
-                    answers.summary(lambda r : hosts_found.append(target))
-                except:
-                    pass
-            
+            hosts_found = [i for i in results if i is not None]
+
             if not hosts_found:
                 print('[-]Not found any host')
             else:
@@ -297,12 +314,6 @@ class Scanner:
 
             return False
 
-    # def list_interfaces(self):
-    #     print_figlet()
-    #     show_interfaces()
-
-    #     return True
-
 def arguments():
     parser = argparse.ArgumentParser(description="ASTSU - Network Tool",usage="\n\tastsu.py -sC 192.168.0.106\n\tastsu.py -sA 192.168.0.106")
     
@@ -313,7 +324,6 @@ def arguments():
     parser.add_argument('-d',"--discover",help="Discover hosts in the network",action="count")
     parser.add_argument('-p',"--protocol",help="Protocol to use in the scans. ICMP,UDP,TCP.",type=str,choices=['ICMP','UDP','TCP'],default=None)
     parser.add_argument('-i',"--interface",help="Interface to use",default=None)
-    # parser.add_argument('-li',"--list-interfaces",help="List avaliables interfaces",action="count")
     parser.add_argument('-t',"--timeout",help="Timeout to each request",default=5,type=int)
     parser.add_argument('-st',"--stealth",help="Use Stealth scan method (TCP)",action="count")
     parser.add_argument('Target',nargs='?',default=None)
@@ -362,8 +372,6 @@ if __name__ == '__main__':
     elif args.discover:
         scanner.discover_net() 
 
-    # elif args.list_interfaces:
-    #     scanner.list_interfaces()
     else:
         parser.print_help()
 
