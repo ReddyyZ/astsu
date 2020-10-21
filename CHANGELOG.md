@@ -47,3 +47,8 @@ I modified the entire script, leaving the functions in a class, better structuri
 ## [v1.1.1] - 2020-10-21
 ### Added
 - Bug fixes on "Discover Hosts" scan.
+
+## [v1.1.2] - 2020-10-21
+
+- Formatting results
+- Added loading bar
