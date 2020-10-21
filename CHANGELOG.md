@@ -44,6 +44,6 @@ I modified the entire script, leaving the functions in a class, better structuri
   - -p | Protocol to use in the scan
   - -i | Interface to use
 
-## [v1.1.1]
+## [v1.1.1] - 2020-10-21
 ### Added
 - Bug fixes on "Discover Hosts" scan.
