@@ -20,6 +20,11 @@ Uses as a base the router's ip to map all possible ips. It then sends an ICMP pa
 - ### OS Scan
 Sends an ICMP packet to the destination and waits for a response. Then, extracts the TTL from the destination response and checks the possible OS in a list, if have founded, prints it.
 
+## OS Support
+- **Windows** :heavy_check_mark:              
+- **Linux** :heavy_check_mark:             
+- **Mac** :question:
+
 ## How to install
 Clone this repository
 ``` git clone https://github.com/ReddyyZ/astsu.git ```                                                                                    
@@ -57,10 +62,27 @@ Clone this repository
   - -p | Protocol to use in the scan
   - -i | Interface to use
 
-## OS Support
-- **Windows** :heavy_check_mark:              
-- **Linux** :heavy_check_mark:             
-- **Mac** :question:
+## Examples
+
+- Discover hosts
+```bash
+astsu -d
+```
+
+- Scan common ports using SYN Scan
+```bash
+astsu -sC -st 192.168.1.1
+```
+
+- Scan a range of ports
+```bash
+astsu 192.168.1.1 -sP 1 443
+```
+
+- Scan OS
+```bash
+astsu -sO 192.168.1.1
+```
 
 ## License
 This project is under the [MIT License](LICENSE).
