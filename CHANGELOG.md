@@ -53,7 +53,7 @@ I modified the entire script, leaving the functions in a class, better structuri
 - Formatting results
 - Added loading bar
 
-## [v1.1.3] - 2020-10-21
+## [v1.1.3] - 2020-10-24
 
 - Formatting results
 - Bug fixes
