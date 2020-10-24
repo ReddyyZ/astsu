@@ -8,18 +8,32 @@ from time import sleep
 from threading import Thread
 from modules import service_detection,os_detection
 from progress.bar import ChargingBar
+from colorama import Fore
 import rpycolors
 
 old_print = print
 print = rpycolors.Console().print
 
+white   = Fore.WHITE
+black   = Fore.BLACK
+red     = Fore.RED
+reset   = Fore.RESET
+blue    = Fore.BLUE
+cyan    = Fore.CYAN
+yellow  = Fore.YELLOW
+green   = Fore.GREEN
+magenta = Fore.MAGENTA
+
+OPEN_PORT = 80
+
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+
 
 clear = lambda:os.system('cls' if os.name == 'nt' else 'clear')
 
-__version__ = "v1.1.2"
+__version__ = "v1.1.3"
 
-def print_figlet():
+def print_figlet(sleep=True):
     clear()
     print(textwrap.dedent(
     f'''
@@ -38,10 +52,11 @@ def print_figlet():
     '''
     ))
 
-    try:
-        time.sleep(4.5)
-    except KeyboardInterrupt:
-        pass
+    if sleep:
+        try:
+            time.sleep(4.5)
+        except KeyboardInterrupt:
+            pass
 
 class Scanner:
     def __init__(self,target=None,my_ip=None,protocol=None,timeout=5,interface=None):
@@ -120,15 +135,15 @@ class Scanner:
         open_or_filtered = ports_saved['open/filtered']
 
         if response[port] == "Closed":
-            print(f"[[red]-[/red]]Port: {port} - Closed")
+            logging.warning(f"Port: {port} - Closed")
         elif response[port] == "Open":
-            print(f"[[green]+[/green]]Port: {port} - Open")
+            logging.info(f"Port: {port} - Open")
             open_ports.append(port)
         elif response[port] == "Filtered":
-            print(f"[[cyan]*[/cyan]]Port: {port} - Filtered")
+            logging.warning(f"Port: {port} - Filtered")
             filtered_ports.append(port)
         elif response[port] == "Open/Filtered":
-            print(f"[[green]+[/green]]Port: {port} - Open/Filtered")
+            logging.info(f"Port: {port} - Open/Filtered")
             open_or_filtered.append(port)
         else:
             pass
@@ -139,8 +154,8 @@ class Scanner:
             open_or_filtered
         )
 
-    def common_scan(self,stealth=None):
-        print_figlet()
+    def common_scan(self,stealth=None,sv=None):
+        # print_figlet()
 
         if not self.protocol:
             protocol = "TCP"
@@ -153,12 +168,12 @@ class Scanner:
         open_or_filtered = []
 
         if stealth:
-            print("[[cyan]*[/cyan]]Starting - Stealth TCP Port Scan\n")
+            logging.info("Starting - Stealth TCP Port Scan\n")
         else:
             if protocol == "TCP":
-                print("[[cyan]*[/cyan]]Starting - TCP Connect Port Scan\n")
+                logging.info("Starting - TCP Connect Port Scan\n")
             elif protocol == "UDP":
-                print("[[cyan]*[/cyan]]Starting - UDP Port Scan\n")
+                logging.info("Starting - UDP Port Scan\n")
             else:
                 pass
 
@@ -178,16 +193,17 @@ class Scanner:
         if open_ports or filtered_ports or open_or_filtered:
             total = len(open_ports) + len(filtered_ports) + len(open_or_filtered)
 
-            print(f"\n[[green]+[/green]]Founded {total} ports!")
+            print("")
+            logging.info(f"Founded {total} ports!")
 
             for port in open_ports:
-                print(f"[[green]+[/green]]Port: {port} - Open")
+                logging.info(f"Port: {port} - Open")
             for port in filtered_ports:
-                print(f"[[/cyan]*[/cyan]]Port: {port} - Filtered")
+                logging.warning(f"Port: {port} - Filtered")
             for port in open_or_filtered:
-                print(f"[[green]+[/green]]Port: {port} - Open/Filtered")
+                logging.info(f"Port: {port} - Open/Filtered")
 
-    def range_scan(self,start,end=None,stealth=None):
+    def range_scan(self,start,end=None,stealth=None,sv=None):
         open_ports = []
         filtered_ports = []
         open_or_filtered = []
@@ -196,13 +212,13 @@ class Scanner:
         if not protocol:
             protocol = "TCP"
 
-        print_figlet()
+        # print_figlet()
         if protocol == "TCP" and stealth:
-            print("[[cyan]*[/cyan]]Starting - TCP Stealth Port Scan\n")
+            logging.info("Starting - TCP Stealth Port Scan\n")
         elif protocol == "TCP" and not stealth:
-            print("[[cyan]*[/cyan]]Starting - TCP Connect Port Scan\n")
+            logging.info("Starting - TCP Connect Port Scan\n")
         elif protocol == "UDP":
-            print("[[cyan]*[/cyan]]Starting - UDP Port Scan\n")
+            logging.info("Starting - UDP Port Scan\n")
         else:
             pass
 
@@ -222,15 +238,15 @@ class Scanner:
             if open_ports or filtered_ports or open_or_filtered:
                 total = len(open_ports) + len(filtered_ports) + len(open_or_filtered)
 
-                print_figlet()
-                print(f"[[green]+[/green]]Founded {total} ports!")
+                # print_figlet()
+                logging.info(f"Founded {total} ports!")
 
                 for port in open_ports:
-                    print(f"[[green]+[/green]]Port: {port} - Open")
+                    logging.info(f"Port: {port} - Open")
                 for port in filtered_ports:
-                    print(f"[[cyan]*[/cyan]]Port: {port} - Filtered")
+                    logging.warning(f"Port: {port} - Filtered")
                 for port in open_or_filtered:
-                    print(f"[[green]+[/green]]Port: {port} - Open/Filtered")
+                    logging.info(f"Port: {port} - Open/Filtered")
         else:
             scan = self.port_scan(stealth)
 
@@ -246,25 +262,24 @@ class Scanner:
             if open_ports or filtered_ports or open_or_filtered:
                 total = len(open_ports) + len(filtered_ports) + len(open_or_filtered)
 
-                print_figlet()
-                print(f"[[green]+[/green]]Founded {total} ports!")
+                # print_figlet()
+                logging.info(f"Founded {total} ports!")
 
                 for port in open_ports:
-                    print(f"[[green]+[/green]]Port: {port} - Open")
+                    logging.info(f"Port: {port} - Open")
                 for port in filtered_ports:
-                    print(f"[[cyan]*[/cyan]]Port: {port} - Filtered")
+                    logging.debug(f"Port: {port} - Filtered")
                 for port in open_or_filtered:
-                    print(f"[[green]+[/green]]Port: {port} - Open/Filtered")
+                    logging.info(f"Port: {port} - Open/Filtered")
 
     def os_scan(self):
-        print_figlet()
-
         target_os = os_detection.scan(self.target)
         
         if target_os:
-            print(f"[[green]+[/green]]Target OS: {target_os}")
+            print("")
+            logging.info(f"Target OS: {target_os}")
         else:
-            print("[[red]-[/red]]Error when scanning OS")
+            logging.warning("[[red]-[/red]]Error when scanning OS")
 
     def send_icmp(self,target, result, index):
         # print(f"[+]Sending ICMP request to {target}")
@@ -280,16 +295,16 @@ class Scanner:
         protocol = self.protocol
         base_ip = self.my_ip
 
-        print_figlet()
+        # print_figlet()
 
         if not protocol:
             protocol = "ICMP"
         else:
             if protocol != "ICMP":
-                print(f"[[red]![/red]]Warning: {protocol} is not supported by discover_net function! Changed to ICMP")
+                logging.warning(f"Warning: {protocol} is not supported by discover_net function! Changed to ICMP")
 
         if protocol == "ICMP":
-            print("[[red]+[/red]]Starting - Discover Hosts Scan")
+            logging.info("Starting - Discover Hosts Scan")
 
             base_ip = base_ip.split('.')
             base_ip = f"{str(base_ip[0])}.{str(base_ip[1])}.{str(base_ip[2])}.0/{str(ip_range)}"
@@ -317,15 +332,16 @@ class Scanner:
             hosts_found = [i for i in results if i is not None]
 
             if not hosts_found:
-                print('[[red]-[/red]]Not found any host')
+                logging.warn('[[red]-[/red]]Not found any host')
             else:
-                print(f'\n[[green]+[/green]]{len(hosts_found)} hosts founded')
+                print("")
+                logging.info(f'{len(hosts_found)} hosts founded')
                 for host in hosts_found:
-                    print(f'[[green]+[/green]]Host found: {host}')
+                    logging.info(f'Host found: {host}')
             
             return True
         else:
-            print("[[red]-[/red]]Invalid protocol for this scan")
+            logging.critical("[[red]-[/red]]Invalid protocol for this scan")
 
             return False
 
@@ -335,20 +351,38 @@ def arguments():
     parser.add_argument('-sC',"--scan-common",help="Scan common ports",action="count")
     parser.add_argument('-sA',"--scan-all",help="Scan all ports",action="count")
     parser.add_argument('-sO',"--scan-os",help="Scan OS",action="count")
-    parser.add_argument('-sP',"--scan-port",help="Scan defined port",nargs='+',type=int)
+    parser.add_argument('-sP',"--scan-port",help="Scan defined port")
+    parser.add_argument('-sV',"--scan-service",help="Try to detect service running")
     parser.add_argument('-d',"--discover",help="Discover hosts in the network",action="count")
     parser.add_argument('-p',"--protocol",help="Protocol to use in the scans. ICMP,UDP,TCP.",type=str,choices=['ICMP','UDP','TCP'],default=None)
     parser.add_argument('-i',"--interface",help="Interface to use",default=None)
     parser.add_argument('-t',"--timeout",help="Timeout to each request",default=5,type=int)
     parser.add_argument('-st',"--stealth",help="Use Stealth scan method (TCP)",action="count")
+    parser.add_argument('-v',"--verbose",action="count")
     parser.add_argument('Target',nargs='?',default=None)
 
     args = parser.parse_args()
+
+    if not args.discover and not args.Target:
+        sys.exit(parser.print_help())
+
+    if not args.scan_common and not args.scan_all and not args.scan_os and not args.scan_port and not args.discover:
+        sys.exit(parser.print_help())
 
     return (args, parser)
 
 if __name__ == '__main__':
     args, parser = arguments() 
+
+    del logging.root.handlers[:]
+  
+    logging.addLevelName(logging.CRITICAL, f"[{red}!!{reset}]")
+    logging.addLevelName(logging.WARNING, f"[{red}!{reset}]")
+    logging.addLevelName(logging.INFO, f"[{cyan}*{reset}]")
+    logging.addLevelName(logging.DEBUG, f"[{cyan}**{reset}]")
+    logging.basicConfig(format="%(levelname)s%(message)s", level=logging.DEBUG if args.verbose else logging.INFO)
+
+    print_figlet()
 
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8",80))
@@ -358,31 +392,16 @@ if __name__ == '__main__':
     scanner = Scanner(target=args.Target,my_ip=ip,protocol=args.protocol,timeout=args.timeout,interface=args.interface)
 
     if args.scan_common:
-        if not args.Target:
-            sys.exit(parser.print_help())
-
-        scanner.common_scan(stealth=args.stealth)
+        scanner.common_scan(stealth=args.stealth,sv=args.scan_service)
 
     elif args.scan_all:
-        if not args.Target:
-            sys.exit(parser.print_help())
-        
-        scanner.range_scan(start=0,end=65535,stealth=args.stealth)
-
-    elif args.scan_os:
-        if not args.Target:
-            sys.exit(parser.print_help())
-
-        scanner.os_scan()
+        scanner.range_scan(start=0,end=65535,stealth=args.stealth,sv=args.scan_service)
 
     elif args.scan_port:
-        if not args.Target:
-            sys.exit(parser.print_help())
-        
         try:
-            scanner.range_scan(start=args.scan_port[0],end=args.scan_port[1],stealth=args.stealth)
+            scanner.range_scan(start=int(args.scan_port.split(',')[0]),end=int(args.scan_port.split(',')[1]),stealth=args.stealth,sv=args.scan_service)
         except:
-            scanner.range_scan(start=args.scan_port,stealth=args.stealth)
+            scanner.range_scan(start=args.scan_port,stealth=args.stealth,sv=args.scan_service)
 
     elif args.discover:
         scanner.discover_net() 
@@ -390,3 +409,5 @@ if __name__ == '__main__':
     else:
         parser.print_help()
 
+    if args.scan_os:
+        scanner.os_scan()
