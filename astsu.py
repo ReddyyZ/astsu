@@ -2,9 +2,10 @@
 
 # -*- coding:utf-8 -*-
 import os,sys,socket,ipaddress,argparse,textwrap,logging
+from typing import Optional, Dict, Tuple, List
 from scapy.all import *
 from ctypes import *
-from time import sleep
+import time
 from threading import Thread
 from modules import service_detection,os_detection
 from progress.bar import ChargingBar
@@ -23,8 +24,6 @@ cyan    = Fore.CYAN
 yellow  = Fore.YELLOW
 green   = Fore.GREEN
 magenta = Fore.MAGENTA
-
-OPEN_PORT = 80
 
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 
@@ -59,14 +58,16 @@ def print_figlet(sleep=True):
             pass
 
 class Scanner:
-    def __init__(self,target=None,my_ip=None,protocol=None,timeout=5,interface=None):
+    def __init__(self, target: Optional[str] = None, my_ip: Optional[str] = None, 
+                 protocol: Optional[str] = None, timeout: int = 5, 
+                 interface: Optional[str] = None) -> None:
         self.target = target
         self.my_ip = my_ip
         self.protocol = protocol
         self.timeout = timeout
         self.interface = interface
 
-    def port_scan(self,stealth=None,port=80):
+    def port_scan(self, stealth: Optional[bool] = None, port: int = 80) -> Optional[Dict[int, str]]:
         protocol = self.protocol if self.protocol else "TCP"
 
         if stealth:
@@ -332,7 +333,7 @@ class Scanner:
             hosts_found = [i for i in results if i is not None]
 
             if not hosts_found:
-                logging.warn('[[red]-[/red]]Not found any host')
+                logging.warning('[[red]-[/red]]Not found any host')
             else:
                 print("")
                 logging.info(f'{len(hosts_found)} hosts founded')
@@ -400,8 +401,8 @@ if __name__ == '__main__':
     elif args.scan_port:
         try:
             scanner.range_scan(start=int(args.scan_port.split(',')[0]),end=int(args.scan_port.split(',')[1]),stealth=args.stealth,sv=args.scan_service)
-        except:
-            scanner.range_scan(start=args.scan_port,stealth=args.stealth,sv=args.scan_service)
+        except (IndexError, ValueError):
+            scanner.range_scan(start=int(args.scan_port),stealth=args.stealth,sv=args.scan_service)
 
     elif args.discover:
         scanner.discover_net() 

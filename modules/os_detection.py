@@ -1,8 +1,22 @@
 from scapy.all import *
 
 def scan(target,interface=None):
+    """
+    Detect OS based on TTL value from ICMP response.
+    Common default TTL values:
+    - Linux/Unix: 64
+    - Windows: 128  
+    - Cisco/Network Equipment: 255
+    - Windows 95/98: 32
+    """
     try:
-        os_ttl = {'Linux/Unix 2.2-2.4 >':255,'Linux/Unix 2.0.x kernel':64,'Windows 98':32,'Windows':128}
+        # TTL value -> OS mapping (more efficient lookup)
+        ttl_to_os = {
+            32: 'Windows 95/98',
+            64: 'Linux/Unix',
+            128: 'Windows',
+            255: 'Unix/BSD/Network Equipment'
+        }
         pkg = IP(dst=target,ttl=128)/ICMP()
 
         if interface:
@@ -12,12 +26,21 @@ def scan(target,interface=None):
 
         try:
             target_ttl = ans[0][1].ttl
-        except:
+        except (IndexError, AttributeError):
             print("[-] Host did not respond")
             return False
 
-        for ttl in os_ttl:
-            if target_ttl == os_ttl[ttl]:
-                return ttl
-    except:
+        # Direct match
+        if target_ttl in ttl_to_os:
+            return ttl_to_os[target_ttl]
+        
+        # TTL decreases with each hop, so check ranges
+        if target_ttl <= 64:
+            return f'Linux/Unix (TTL: {target_ttl})'
+        elif target_ttl <= 128:
+            return f'Windows (TTL: {target_ttl})'
+        else:
+            return f'Unix/BSD/Network Equipment (TTL: {target_ttl})'
+            
+    except Exception:
         return False
